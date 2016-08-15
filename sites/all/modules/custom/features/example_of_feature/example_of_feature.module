@@ -1,0 +1,48 @@
+<?php
+/**
+ * @file
+ * Use this module to select photos.
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function example_of_feature_menu() {
+  $items['example_of_feature/event'] = array(
+    'title' => 'Photos',
+    'page callback' => 'example_of_feature_showlist',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    );
+  return $items;
+}
+
+/**
+ * Page callback.
+ */
+function example_of_feature_showlist($event = NULL) {
+  $query = db_select('node', 'n');
+  $query
+    ->fields('n', array('title'))
+    ->range(0,100);
+  $result = $query->execute();
+
+  $output = 'List <br/>';
+  foreach($result as $row) {
+    $output .= $row->title."<br/>";
+  }
+ 
+  return theme('example_of_feature',array('results' => $output, 
+                                          'variable1' => "Blablablabla" ));
+}
+
+function example_of_feature_theme() {
+  return array(
+    'example_of_feature' => array(
+      'template' => 'templates/example_of_feature',
+      'variables' => array(
+        'results' => NULL,
+      ),
+     ),
+  );
+}
